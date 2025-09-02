@@ -1,0 +1,24 @@
+pipeline {
+agent any
+
+stages {
+stage('Clone Repo') {
+steps {
+git 'https://github.com/swethaJ27/project.git'
+      }
+    }
+stage('Build Docker Image') {
+steps {
+sh 'docker build -t mini-image .'
+      }
+    }
+stage('Run Docker Container') {
+steps {
+sh '''
+docker rm -f container-ps || true
+docker run -dit --name container 3 -p 9092:80 mini-image
+        '''
+      }
+    }
+  }
+}
